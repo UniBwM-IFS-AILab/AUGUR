@@ -18,7 +18,7 @@ Augur is a Flutter package for our ASUPEX framework that provides real-time visu
 ## Installation
 Clone this repositiory:
 ```
-git clone 
+git clone https://github.com/UniBwM-IFS-AILab/AUGUR
 ```
 Change directory to AUGUR:
 ```
