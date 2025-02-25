@@ -1,0 +1,47 @@
+name: augur
+description: "A flutter project for the User Interface of the AUSPEX Framework."
+publish_to: 'none'
+version: 0.9.0
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+  flutter_map: ^7.0.1
+  url_launcher: ^6.3.0
+  latlong2: ^0.9.1
+  http: ^1.2.1
+  material_symbols_icons: ^4.2762.0
+  geolocator: ^13.0.2
+  roslibdart: ^0.0.1-dev+4
+  vector_math: ^2.1.4
+  flutter_launcher_icons: ^0.14.1
+  redis: ^4.0.0
+
+dependency_overrides:
+  http: ^1.2.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter_launcher_icons:
+  android: true
+  image_path: "assets/augur_icon.png"
+  adaptive_icon_foreground: "assets/augur_icon.png"
+  adaptive_icon_background: "#ffffff"  # Change to a solid color or a valid image path
+  min_sdk_android: 16 # android min sdk min:16, default 21
+  windows:
+    generate: true
+    image_path: "assets/augur_icon.png"
+    icon_size: 256 # min:48, max:256, default: 48
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/
