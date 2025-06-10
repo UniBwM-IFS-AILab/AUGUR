@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="assets/augur_logo.png" width="160" height="220">
+  <img src="assets/icons/augur_logo.png" width="160" height="220">
 </div>
 <div align="center">
     <h1 align="center">AUGUR</h1>
