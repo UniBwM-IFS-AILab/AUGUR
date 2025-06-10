@@ -10,7 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.8
-  flutter_map: ^7.0.1
+  flutter_map: ^8.0.1
   url_launcher: ^6.3.0
   latlong2: ^0.9.1
   http: ^1.2.1
@@ -20,6 +20,17 @@ dependencies:
   vector_math: ^2.1.4
   flutter_launcher_icons: ^0.14.1
   redis: ^4.0.0
+  flutter_riverpod: ^2.6.1
+  permission_handler: ^11.4.0
+  sherpa_onnx: ^1.10.46
+  sherpa_onnx_linux: ^1.10.46
+  sherpa_onnx_android: ^1.10.46
+  sherpa_onnx_windows: ^1.10.46
+  record: ^5.2.1
+  path_provider: ^2.1.5
+  path: ^1.9.0
+  audioplayers: ^6.4.0
+  asset_fill: ^2.0.0
 
 dependency_overrides:
   http: ^1.2.0
@@ -31,17 +42,58 @@ dev_dependencies:
 
 flutter_launcher_icons:
   android: true
-  image_path: "assets/augur_icon.png"
-  adaptive_icon_foreground: "assets/augur_icon.png"
+  image_path: "assets/icons/augur_icon.png"
+  adaptive_icon_foreground: "assets/icons/augur_icon.png"
   adaptive_icon_background: "#ffffff"  # Change to a solid color or a valid image path
-  min_sdk_android: 16 # android min sdk min:16, default 21
+  min_sdk_android: 26
   windows:
     generate: true
-    image_path: "assets/augur_icon.png"
+    image_path: "assets/icons/augur_icon.png"
     icon_size: 256 # min:48, max:256, default: 48
 
 flutter:
   uses-material-design: true
 
   assets:
-    - assets/
+    - assets/icons/
+    - assets/models/
+    - assets/models/asr/
+    - assets/models/tts/
+    - assets/models/tts/espeak-ng-data/
+    - assets/models/tts/espeak-ng-data/lang/
+    - assets/models/tts/espeak-ng-data/lang/aav/
+    - assets/models/tts/espeak-ng-data/lang/art/
+    - assets/models/tts/espeak-ng-data/lang/azc/
+    - assets/models/tts/espeak-ng-data/lang/bat/
+    - assets/models/tts/espeak-ng-data/lang/bnt/
+    - assets/models/tts/espeak-ng-data/lang/ccs/
+    - assets/models/tts/espeak-ng-data/lang/cel/
+    - assets/models/tts/espeak-ng-data/lang/cus/
+    - assets/models/tts/espeak-ng-data/lang/dra/
+    - assets/models/tts/espeak-ng-data/lang/esx/
+    - assets/models/tts/espeak-ng-data/lang/gmq/
+    - assets/models/tts/espeak-ng-data/lang/gmw/
+    - assets/models/tts/espeak-ng-data/lang/grk/
+    - assets/models/tts/espeak-ng-data/lang/inc/
+    - assets/models/tts/espeak-ng-data/lang/ine/
+    - assets/models/tts/espeak-ng-data/lang/ira/
+    - assets/models/tts/espeak-ng-data/lang/iro/
+    - assets/models/tts/espeak-ng-data/lang/itc/
+    - assets/models/tts/espeak-ng-data/lang/jpx/
+    - assets/models/tts/espeak-ng-data/lang/map/
+    - assets/models/tts/espeak-ng-data/lang/miz/
+    - assets/models/tts/espeak-ng-data/lang/myn/
+    - assets/models/tts/espeak-ng-data/lang/poz/
+    - assets/models/tts/espeak-ng-data/lang/roa/
+    - assets/models/tts/espeak-ng-data/lang/sai/
+    - assets/models/tts/espeak-ng-data/lang/sem/
+    - assets/models/tts/espeak-ng-data/lang/sit/
+    - assets/models/tts/espeak-ng-data/lang/tai/
+    - assets/models/tts/espeak-ng-data/lang/trk/
+    - assets/models/tts/espeak-ng-data/lang/urj/
+    - assets/models/tts/espeak-ng-data/lang/zle/
+    - assets/models/tts/espeak-ng-data/lang/zls/
+    - assets/models/tts/espeak-ng-data/lang/zlw/
+    - assets/models/tts/espeak-ng-data/voices/
+    - assets/models/tts/espeak-ng-data/voices/!v/
+

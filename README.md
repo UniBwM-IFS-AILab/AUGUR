@@ -12,7 +12,7 @@ Augur:
 ---
 
 ## Description
-Augur is a Flutter package for our [AUSPEX](https://github.com/UniBwM-IFS-AILab/AUSPEX/tree/main?tab=readme-ov-file) framework that provides real-time visualization of position, telemetry, and other essential flight data. Designed for seamless integration, it enhances situational awareness with a clear and intuitive display. It connects with Valkey and ROS 2 over respective clients.
+Augur is a Flutter package for our [AUSPEX](https://github.com/UniBwM-IFS-AILab/AUSPEX/tree/main?tab=readme-ov-file) framework that provides real-time visualization of position, telemetry, and other essential flight data. Designed for seamless integration, it enhances situational awareness with a clear and intuitive display. It connects with Valkey and ROS 2 over respective clients. A working Flutter installation is required to run AUGUR.
 
 ---
 ## Installation

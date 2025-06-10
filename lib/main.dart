@@ -1,8 +1,13 @@
+import 'package:augur/ui/utils/app_colors.dart';
+import 'package:augur/ui/utils/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:augur/pages/launch_page.dart';
-import 'package:flutter/services.dart'; 
+import 'package:augur/ui/pages/launch_page.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart'; // Import to check for kIsWeb
-import 'dart:io' show Platform; // Import to check the platform
+import 'dart:io' show Platform;
+
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sherpa_onnx/sherpa_onnx.dart' as sherpa_onnx; // Import to check the platform
 
 void main(){
   // Ensure all bindings are initialized
@@ -15,8 +20,7 @@ void main(){
     ]);
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.leanBack);
   }
-  runApp(const MainApp());
-  
+  runApp(ProviderScope(child: MainApp()));
 }
 
 class MainApp extends StatelessWidget {
@@ -24,11 +28,13 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    sherpa_onnx.initBindings();
+    copyAllAssetFiles('Augur_tmp');
     return MaterialApp(
       title: 'Augur',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: MaterialColor(AppColors.primary.toARGB32(), getColorSwatch(AppColors.primary)),
       ),
       home: LaunchMenu(),
     );

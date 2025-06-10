@@ -1,0 +1,2 @@
+C:/Users/Master/Documents/Repositiories/AUGUR/android/app/.cxx/Debug/2x1m1y59/arm64-v8a/CMakeFiles/edit_cache.dir
+C:/Users/Master/Documents/Repositiories/AUGUR/android/app/.cxx/Debug/2x1m1y59/arm64-v8a/CMakeFiles/rebuild_cache.dir
