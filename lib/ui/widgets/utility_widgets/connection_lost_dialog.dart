@@ -24,16 +24,22 @@ class ConnectionLostDialogState extends State<ConnectionLostDialog> {
 
   void checkConnection() async {
     if (isConnecting) return;
-    setState(() => isConnecting = true);
+    setState(() {
+      isConnecting = true;
+      errorMessage = '';
+    });
 
     bool success = await widget.onReconnect();
 
-    //setState(() => isConnecting = false);
+    setState(() => isConnecting = false);
 
     if (success) {
-      Navigator.of(context).pop(); // Close dialog if connected
+      if (mounted) {
+        Navigator.of(context).pop(); // Close dialog if connected
+      }
     } else {
-      //setState(() => errorMessage = "Failed to reconnect. Try again.");
+      setState(() => errorMessage =
+          "Failed to reconnect. Please check the IP address and try again.");
     }
   }
 
@@ -66,14 +72,16 @@ class ConnectionLostDialogState extends State<ConnectionLostDialog> {
         // Offline Button
         TextButton(
           style: ButtonStyle(
-            foregroundColor: WidgetStateProperty.all(AppColors.primary), // Text colorolor
-            padding: WidgetStateProperty.all(EdgeInsets.symmetric(horizontal: 20, vertical: 10)), // Padding for better touch
+            foregroundColor:
+                WidgetStateProperty.all(AppColors.primary), // Text colorolor
+            padding: WidgetStateProperty.all(EdgeInsets.symmetric(
+                horizontal: 20, vertical: 10)), // Padding for better touch
             overlayColor: WidgetStateProperty.resolveWith((states) {
               if (states.contains(WidgetState.hovered)) {
-                return AppColors.secondary.withAlpha(50); // Light blue hover effect
+                return AppColors.secondary.withAlpha(50);
               }
               if (states.contains(WidgetState.pressed)) {
-                return AppColors.secondary.withAlpha(100); // Darker blue when pressed
+                return AppColors.secondary.withAlpha(100);
               }
               return null;
             }),
@@ -89,14 +97,16 @@ class ConnectionLostDialogState extends State<ConnectionLostDialog> {
         // Reconnect Button
         TextButton(
           style: ButtonStyle(
-            foregroundColor: WidgetStateProperty.all(AppColors.primary), // Text colorver color
-            padding: WidgetStateProperty.all(EdgeInsets.symmetric(horizontal: 20, vertical: 10)),
+            foregroundColor: WidgetStateProperty.all(
+                AppColors.primary), // Text colorver color
+            padding: WidgetStateProperty.all(
+                EdgeInsets.symmetric(horizontal: 20, vertical: 10)),
             overlayColor: WidgetStateProperty.resolveWith((states) {
               if (states.contains(WidgetState.hovered)) {
-                return AppColors.secondary.withAlpha(50); // Light blue hover effect
+                return AppColors.secondary.withAlpha(50);
               }
               if (states.contains(WidgetState.pressed)) {
-                return AppColors.secondary.withAlpha(100); // Darker blue when pressed
+                return AppColors.secondary.withAlpha(100);
               }
               return null;
             }), // Padding for better touch
@@ -107,7 +117,11 @@ class ConnectionLostDialogState extends State<ConnectionLostDialog> {
                   checkConnection();
                 },
           child: isConnecting
-              ? CircularProgressIndicator() // Show loading spinner
+              ? SizedBox(
+                  width: 16,
+                  height: 16,
+                  child: CircularProgressIndicator(strokeWidth: 2),
+                ) // Show loading spinner
               : Text("Reconnect"),
         ),
       ],

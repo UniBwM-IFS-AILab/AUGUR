@@ -2,6 +2,7 @@ import 'package:augur/ui/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:augur/ui/pages/main_page.dart';
 import 'package:augur/ui/widgets/utility_widgets/ip_address_field.dart';
+import 'package:augur/core/services/default_settings_service.dart';
 
 class LaunchMenu extends StatefulWidget {
   const LaunchMenu({super.key});
@@ -11,7 +12,27 @@ class LaunchMenu extends StatefulWidget {
 }
 
 class LaunchMenuState extends State<LaunchMenu> {
-  final TextEditingController _ipController = TextEditingController(text: "127.0.0.1");
+  final TextEditingController _ipController = TextEditingController();
+  final DefaultSettingsService _settingsService = DefaultSettingsService();
+
+  @override
+  void initState() {
+    super.initState();
+    _loadDefaultIp();
+  }
+
+  @override
+  void dispose() {
+    _ipController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _loadDefaultIp() async {
+    final defaultIp = await _settingsService.getDefaultIp();
+    setState(() {
+      _ipController.text = defaultIp;
+    });
+  }
 
   void _confirm() {
     String ip = _ipController.text;
@@ -53,27 +74,33 @@ class LaunchMenuState extends State<LaunchMenu> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SizedBox(
-                width: MediaQuery.of(context).size.width * 0.1, // Scales to 40% of screen width
-                height: MediaQuery.of(context).size.height * 0.25, // Scales to 30% of screen height
+                width: MediaQuery.of(context).size.width *
+                    0.1, // Scales to 40% of screen width
+                height: MediaQuery.of(context).size.height *
+                    0.25, // Scales to 30% of screen height
                 child: Container(
                   width: 150, // Fixed size inside the scalable box
                   height: 205, // Fixed size inside the scalable box
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20), // Rounded corners
-                    color: Colors.white.withAlpha(200), // Adjust opacity using alpha (0-255)
+                    color: Colors.white
+                        .withAlpha(200), // Adjust opacity using alpha (0-255)
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withAlpha(80), // Shadow with 80/255 opacity
+                        color: Colors.black
+                            .withAlpha(80), // Shadow with 80/255 opacity
                         blurRadius: 10,
                         spreadRadius: 2,
                       ),
                     ],
                   ),
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(20), // Ensure corners are rounded
+                    borderRadius:
+                        BorderRadius.circular(20), // Ensure corners are rounded
                     child: Image.asset(
                       'assets/icons/augur_logo_flutter.png',
-                      fit: BoxFit.cover, // Ensures the image fills the container
+                      fit:
+                          BoxFit.cover, // Ensures the image fills the container
                     ),
                   ),
                 ),
@@ -85,12 +112,11 @@ class LaunchMenuState extends State<LaunchMenu> {
               Text(
                 "AUGUR",
                 style: TextStyle(
-                  fontSize: 45,
-                  fontStyle: FontStyle.italic,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 2,
-                  color: AppColors.logo
-                ),
+                    fontSize: 45,
+                    fontStyle: FontStyle.italic,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 2,
+                    color: AppColors.logo),
               ),
               SizedBox(height: 30),
 

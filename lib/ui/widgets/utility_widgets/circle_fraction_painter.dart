@@ -9,7 +9,7 @@ class CircleFractionPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = const Color.fromARGB(255, 255, 255, 255).withOpacity(0.6)
+      ..color = const Color.fromARGB(255, 255, 255, 255).withAlpha(153)
       ..style = PaintingStyle.fill;
 
     final center = Offset(size.width / 2, size.height / 2);
@@ -18,8 +18,8 @@ class CircleFractionPainter extends CustomPainter {
     // Draw only the portion of the circle corresponding to the angleCovered
     canvas.drawArc(
       Rect.fromCircle(center: center, radius: radius),
-      -pi / 2,  // Start at 12 o'clock position
-      angleCovered,  // Sweep angle based on number of drones
+      -pi / 2, // Start at 12 o'clock position
+      angleCovered, // Sweep angle based on number of platforms
       true,
       paint,
     );

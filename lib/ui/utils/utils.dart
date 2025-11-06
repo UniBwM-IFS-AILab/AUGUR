@@ -7,8 +7,10 @@ import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
 Future<List<String>> getAllAssetFiles() async {
-  final AssetManifest assetManifest = await AssetManifest.loadFromAssetBundle(rootBundle);
-  final List<String> assets = assetManifest.listAssets()
+  final AssetManifest assetManifest =
+      await AssetManifest.loadFromAssetBundle(rootBundle);
+  final List<String> assets = assetManifest
+      .listAssets()
       .where((path) => p.split(path)[1] == 'models')
       .toList();
   return assets;
@@ -79,7 +81,6 @@ Future<String> generateWaveFilename([String suffix = '']) async {
   return p.join(directory.path, filename);
 }
 
-
 Uint8List encodeWAV(Float32List floatSamples, int sampleRate) {
   final int numSamples = floatSamples.length;
   final int byteRate = sampleRate * 2; // 16-bit PCM = 2 bytes per sample
@@ -114,4 +115,3 @@ Uint8List encodeWAV(Float32List floatSamples, int sampleRate) {
 
   return wavBytes;
 }
-

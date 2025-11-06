@@ -1,23 +1,30 @@
-import 'dart:ui';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../core/clients/ros_client.dart';
 
 class RosProvider extends StateNotifier<RosClient?> {
   RosProvider() : super(null);
 
-  void initialize(String rosUrl, VoidCallback onConnectionStatusChange) {
+  void initialize(String rosUrl, VoidCallback onConnectionLost) {
     if (state != null) return; // Prevent multiple initializations
 
     state = RosClient(url: rosUrl);
 
     // Listen to connection status changes
     state!.statusStream.listen((status) {
-      onConnectionStatusChange(); // Notify UI when connection status changes
+      debugPrint("RosProvider: Status changed to: $status");
+      if (!state!.isConnected()) {
+        debugPrint("RosProvider: Connection lost, but only warning");
+      }
     });
   }
 
   Future<void> connect() async {
-    await state?.connect();
+    try {
+      await state?.connect();
+    } catch (e) {
+      rethrow;
+    }
   }
 
   Future<void> disconnect() async {
@@ -42,7 +49,7 @@ class RosProvider extends StateNotifier<RosClient?> {
     int queueLength = 10,
   }) {
     if (state == null) {
-      return Stream.value(null);  // Return empty stream if not initialized
+      return Stream.value(null); // Return empty stream if not initialized
     }
 
     return state!.subscribeToTopic(
@@ -54,16 +61,12 @@ class RosProvider extends StateNotifier<RosClient?> {
     );
   }
 
-  void publishToTopic({
-    required String topicName,
-    required String messageType,
-    required Map<String, dynamic> message
-  }) {
+  void publishToTopic(
+      {required String topicName,
+      required String messageType,
+      required Map<String, dynamic> message}) {
     state?.publish(
-      topicName: topicName,
-      messageType: messageType,
-      message: message
-    );
+        topicName: topicName, messageType: messageType, message: message);
   }
 }
 
@@ -94,22 +97,26 @@ class RosTopicConfig {
 
   @override
   bool operator ==(Object other) =>
-    identical(this, other) ||
-    other is RosTopicConfig &&
-    runtimeType == other.runtimeType &&
-    topicName == other.topicName &&
-    messageType == other.messageType &&
-    queueSize == other.queueSize &&
-    queueLength == other.queueLength;
+      identical(this, other) ||
+      other is RosTopicConfig &&
+          runtimeType == other.runtimeType &&
+          topicName == other.topicName &&
+          messageType == other.messageType &&
+          queueSize == other.queueSize &&
+          queueLength == other.queueLength;
 
   @override
-  int get hashCode => Object.hash(topicName, messageType, queueSize, queueLength);
+  int get hashCode =>
+      Object.hash(topicName, messageType, queueSize, queueLength);
 }
 
 // A family provider for ROS topic streams
-final rosTopicStreamProvider = StreamProvider.autoDispose.family<dynamic, RosTopicConfig>((ref, config) {
+final rosTopicStreamProvider =
+    StreamProvider.autoDispose.family<dynamic, RosTopicConfig>((ref, config) {
   final rosClient = ref.watch(rosClientProvider);
-  if (rosClient == null) return Stream.value(null); // Return empty stream if not initialized
+  if (rosClient == null) {
+    return Stream.value(null); // Return empty stream if not initialized
+  }
 
   return rosClient.subscribeToTopic(
     topicName: config.topicName,

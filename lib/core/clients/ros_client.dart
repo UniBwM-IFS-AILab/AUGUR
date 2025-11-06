@@ -1,9 +1,10 @@
 import 'dart:async';
+import 'package:flutter/material.dart';
 import 'package:roslibdart/roslibdart.dart';
 
 class RosClient {
   final String url; // ROS WebSocket URL
-  late Ros _ros;    // ROS instance
+  late Ros _ros; // ROS instance
   bool _isConnected = false;
 
   // Map to store stream controllers for each topic
@@ -23,7 +24,7 @@ class RosClient {
     if (!_isConnected) {
       _ros.connect();
     }
-    print("ROSClient: Connected to ROS at $url");
+    debugPrint("ROSClient: Connected to ROS at $url");
   }
 
   // Disconnect from ROS bridge
@@ -97,7 +98,8 @@ class RosClient {
   }) {
     // Create a stream controller if one doesn't exist
     if (!_topicStreamControllers.containsKey(topicName)) {
-      _topicStreamControllers[topicName] = StreamController<dynamic>.broadcast();
+      _topicStreamControllers[topicName] =
+          StreamController<dynamic>.broadcast();
 
       // Get or create the topic
       final topic = getOrCreateTopic(
@@ -117,23 +119,20 @@ class RosClient {
     return _topicStreamControllers[topicName]!.stream;
   }
 
-  Future<void> subscribeHandler(Map<String, dynamic> msg, String topicName) async {
+  Future<void> subscribeHandler(
+      Map<String, dynamic> msg, String topicName) async {
     if (!_topicStreamControllers[topicName]!.isClosed) {
       _topicStreamControllers[topicName]!.add(msg);
     }
   }
 
   // Publish to a topic
-  void publish({
-    required String topicName,
-    required String messageType,
-    required Map<String, dynamic> message
-  }) {
+  void publish(
+      {required String topicName,
+      required String messageType,
+      required Map<String, dynamic> message}) {
     // Get or create the topic
-    final topic = getOrCreateTopic(
-      name: topicName,
-      messageType: messageType
-    );
+    final topic = getOrCreateTopic(name: topicName, messageType: messageType);
 
     // Publish message
     topic.publish(message);

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-class AppColors {
-  static const Color primary =  Color(0xFF5FA4AF); // Example Purple
-  static const Color secondary =  Color(0xFFC13134); // Example Teal
-  static const Color background = Color(0xFFF5F5F5); // Light Gray
-  static const Color text = Color(0xFF212121); // Dark Gray
-  static const Color accent = Color(0xFF03DAC6); // Yellow
-  static const Color logo = Color(0xFF465058); // Yellow
-}
 
+class AppColors {
+  static const Color primary = Color(0xFF5FA4AF);
+  static const Color secondary = Color(0xFFC13134);
+  static const Color background = Color(0xFFF5F5F5);
+  static const Color text = Color(0xFF212121);
+  static const Color accent = Color(0xFF03DAC6);
+  static const Color logo = Color(0xFF465058);
+}
 
 List<Color> hslPalette(Color color) {
   final shades = <Color>[];

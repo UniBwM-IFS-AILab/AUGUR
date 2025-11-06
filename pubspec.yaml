@@ -15,30 +15,37 @@ dependencies:
   latlong2: ^0.9.1
   http: ^1.2.1
   material_symbols_icons: ^4.2762.0
-  geolocator: ^13.0.2
+  geolocator: ^14.0.2
   roslibdart: ^0.0.1-dev+4
   vector_math: ^2.1.4
   flutter_launcher_icons: ^0.14.1
   redis: ^4.0.0
   flutter_riverpod: ^2.6.1
-  permission_handler: ^11.4.0
+  permission_handler: ^12.0.1
   sherpa_onnx: ^1.10.46
   sherpa_onnx_linux: ^1.10.46
   sherpa_onnx_android: ^1.10.46
   sherpa_onnx_windows: ^1.10.46
-  record: ^5.2.1
+  record: ^6.1.0
   path_provider: ^2.1.5
   path: ^1.9.0
   audioplayers: ^6.4.0
   asset_fill: ^2.0.0
+  rational: ^2.2.3
+  media_kit: ^1.2.1
+  media_kit_video: ^1.2.2
+  media_kit_libs_video: ^1.0.5
 
-dependency_overrides:
-  http: ^1.2.0
+
+# dependency_overrides:
+#   http: ^1.2.0
+#   record_linux: 0.7.2
+#   record_platform_interface: 1.2.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^5.0.0
+  flutter_lints: ^6.0.0
 
 flutter_launcher_icons:
   android: true

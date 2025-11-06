@@ -1,1 +1,1 @@
-enum AreaType { NO_FLY, SEARCH, DANGER, H_PRIO }
+enum AreaType { noFly, search, danger, hPrio }

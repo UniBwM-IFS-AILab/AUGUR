@@ -5,8 +5,13 @@ import 'package:flutter/material.dart';
 class SpeechBubble extends StatefulWidget {
   final Stream<String> textStream;
   final Function(String) onAccept;
+  final VoidCallback? onClear;
 
-  const SpeechBubble({super.key, required this.textStream, required this.onAccept});
+  const SpeechBubble(
+      {super.key,
+      required this.textStream,
+      required this.onAccept,
+      this.onClear});
 
   @override
   SpeechBubbleState createState() => SpeechBubbleState();
@@ -26,9 +31,12 @@ class SpeechBubbleState extends State<SpeechBubble> {
       setState(() {
         if (newText.isEmpty) {
           _lastReceivedText = "";
+          _accumulatedText = "";
+          _textController.text = "";
         } else {
           // Process the new text
-          _accumulatedText = _getCorrectedText(_accumulatedText, _lastReceivedText, newText);
+          _accumulatedText =
+              _getCorrectedText(_accumulatedText, _lastReceivedText, newText);
           _lastReceivedText = newText;
           _textController.text = _accumulatedText;
         }
@@ -36,7 +44,8 @@ class SpeechBubbleState extends State<SpeechBubble> {
     });
   }
 
-  String _getCorrectedText(String accumulatedText, String lastText, String newText) {
+  String _getCorrectedText(
+      String accumulatedText, String lastText, String newText) {
     // No previous accumulation yet
     if (accumulatedText.isEmpty) return newText;
 
@@ -45,10 +54,13 @@ class SpeechBubbleState extends State<SpeechBubble> {
 
     // Check if new text is just extending the last text segment
     // (Speech recognition refining the same utterance)
-    if (lastText.isNotEmpty && (newText.startsWith(lastText) || lastText.startsWith(newText))) {
+    if (lastText.isNotEmpty &&
+        (newText.startsWith(lastText) || lastText.startsWith(newText))) {
       // Replace the last segment with the new text
       if (accumulatedText.endsWith(lastText)) {
-        return accumulatedText.substring(0, accumulatedText.length - lastText.length) + newText;
+        return accumulatedText.substring(
+                0, accumulatedText.length - lastText.length) +
+            newText;
       }
     }
 
@@ -59,12 +71,24 @@ class SpeechBubbleState extends State<SpeechBubble> {
     }
     // Check if this is a completely new phrase (usually longer)
     if (newText.length > 5 &&
-        !accumulatedText.toLowerCase().contains(newText.substring(0, 3).toLowerCase())) {
+        !accumulatedText
+            .toLowerCase()
+            .contains(newText.substring(0, 3).toLowerCase())) {
       // Add new text as continuation
       return "$accumulatedText $newText";
     }
     // Default: if unsure, just add it with a space
     return "$accumulatedText $newText";
+  }
+
+  void _clearState() {
+    setState(() {
+      _textController.text = "";
+      _lastReceivedText = "";
+      _accumulatedText = "";
+    });
+    // Notify parent to clear the stream controller
+    widget.onClear?.call();
   }
 
   @override
@@ -77,79 +101,72 @@ class SpeechBubbleState extends State<SpeechBubble> {
   Widget build(BuildContext context) {
     if (_textController.text.isEmpty) return const SizedBox.shrink();
 
-    return Column(
-      children: [
-        SizedBox(
-          width: 200,
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-            constraints: BoxConstraints(maxHeight: 120),
-            decoration: BoxDecoration(
-              color: AppColors.background,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: IntrinsicHeight(
-              child:Theme(
-                data: ThemeData(
-                  textSelectionTheme: TextSelectionThemeData(
-                    selectionColor: AppColors.secondary.withAlpha(25), // Text selection background color
-                    selectionHandleColor: AppColors.secondary, // Handle (drag cursor) color
-                  ),
+    return Column(children: [
+      SizedBox(
+        width: 200,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          constraints: BoxConstraints(maxHeight: 120),
+          decoration: BoxDecoration(
+            color: AppColors.background,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: IntrinsicHeight(
+            child: Theme(
+              data: ThemeData(
+                textSelectionTheme: TextSelectionThemeData(
+                  selectionColor: AppColors.secondary
+                      .withAlpha(25), // Text selection background color
+                  selectionHandleColor:
+                      AppColors.secondary, // Handle (drag cursor) color
                 ),
-                child: TextField(
+              ),
+              child: TextField(
                   controller: _textController,
                   cursorColor: AppColors.secondary,
                   textAlign: TextAlign.center,
                   decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: "",
-                    ),
+                    border: InputBorder.none,
+                    hintText: "",
+                  ),
                   style: TextStyle(
                     fontSize: _calculateFontSize(_textController.text),
                     fontStyle: FontStyle.italic,
                     color: AppColors.primary,
                   ),
                   maxLines: null,
-                  keyboardType: TextInputType.multiline
-                ),
-              ),
+                  keyboardType: TextInputType.multiline),
             ),
           ),
         ),
-        const SizedBox(height: 12),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            ElevatedButton(
-              onPressed: () {
-                String text = _textController.text;
-                setState(() {
-                  _textController.text="";
-                });
-                widget.onAccept(text);
-              },
-              style: ElevatedButton.styleFrom(
+      ),
+      const SizedBox(height: 12),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          ElevatedButton(
+            onPressed: () {
+              String text = _textController.text;
+              _clearState();
+              widget.onAccept(text);
+            },
+            style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
-                foregroundColor: AppColors.text
-              ),
-              child: const Text("Accept"),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  _textController.text="";
-                });
-              },
-              style: ElevatedButton.styleFrom(
+                foregroundColor: AppColors.text),
+            child: const Text("Accept"),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              _clearState();
+            },
+            style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.secondary,
-                foregroundColor: AppColors.text
-              ),
-              child: const Text("Discard"),
-            ),
-          ],
-        ),
-      ]
-    );
+                foregroundColor: AppColors.text),
+            child: const Text("Discard"),
+          ),
+        ],
+      ),
+    ]);
   }
 
   double _calculateFontSize(String text) {

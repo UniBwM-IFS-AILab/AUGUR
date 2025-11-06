@@ -13,16 +13,18 @@ class SpeechSynthesizer {
   bool _isInitialized = false;
   final Completer<void> _initCompleter = Completer<void>();
 
-  SpeechSynthesizer(){
-    initialize();
-  }
+  // Remove auto-initialization from constructor
+  SpeechSynthesizer();
 
   Future<void> initialize() async {
     if (_isInitialized) return;
+
+    debugPrint('SpeechSynthesizer: Loading TTS models...');
     _tts = await createOfflineTts();
     _player = AudioPlayer();
     _isInitialized = true;
     _initCompleter.complete();
+    debugPrint('SpeechSynthesizer: TTS models loaded successfully');
   }
 
   Future<void> ensureInitialized() async {
@@ -34,9 +36,12 @@ class SpeechSynthesizer {
   Future<sherpa_onnx.OfflineTts> createOfflineTts() async {
     final Directory directory = await getApplicationDocumentsDirectory();
 
-    String modelName = p.join(directory.path, "AUGUR_tmp/models/tts", "en_GB-cori-medium.onnx");
-    String modelTokens = p.join(directory.path, "AUGUR_tmp/models/tts", "tokens.txt");
-    String dataDir = p.join(directory.path, "AUGUR_tmp/models/tts", "espeak-ng-data/");
+    String modelName = p.join(
+        directory.path, "AUGUR_tmp/models/tts", "en_GB-cori-medium.onnx");
+    String modelTokens =
+        p.join(directory.path, "AUGUR_tmp/models/tts", "tokens.txt");
+    String dataDir =
+        p.join(directory.path, "AUGUR_tmp/models/tts", "espeak-ng-data/");
 
     final modelConfig = sherpa_onnx.OfflineTtsModelConfig(
       vits: sherpa_onnx.OfflineTtsVitsModelConfig(
@@ -56,9 +61,10 @@ class SpeechSynthesizer {
     return sherpa_onnx.OfflineTts(config);
   }
 
-  Future<void> synthesizeAndPlay(String text, {int sid = 0, double speed = 1.0}) async {
+  Future<void> synthesizeAndPlay(String text,
+      {int sid = 0, double speed = 1.0}) async {
     await ensureInitialized();
-    print("Generating speech...");
+    debugPrint("Generating speech...");
     final audio = _tts.generate(text: text, sid: sid, speed: speed);
     Uint8List wavData = encodeWAV(audio.samples, audio.sampleRate);
     await _player.play(BytesSource(wavData), mode: PlayerMode.mediaPlayer);

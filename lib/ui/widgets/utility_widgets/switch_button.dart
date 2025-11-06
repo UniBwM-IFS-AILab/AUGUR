@@ -1,24 +1,25 @@
 import 'package:augur/ui/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 
-
 class CustomSwitch extends StatefulWidget {
   final VoidCallback? onPressed; // Callback when the switch is pressed
   final bool isSwitched; // Current state of the switch
   final ValueChanged<bool> onChanged; // Callback for state changes
 
-  const CustomSwitch({super.key, this.onPressed, required this.isSwitched, required this.onChanged});
+  const CustomSwitch(
+      {super.key,
+      this.onPressed,
+      required this.isSwitched,
+      required this.onChanged});
 
   @override
   CustomSwitchState createState() => CustomSwitchState();
 }
 
-
 class CustomSwitchState extends State<CustomSwitch> {
   //bool isSwitched = false;
   @override
   Widget build(BuildContext context) {
-
     return GestureDetector(
       onTap: () {
         widget.onChanged(!widget.isSwitched);
@@ -29,7 +30,9 @@ class CustomSwitchState extends State<CustomSwitch> {
         height: 20.0,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20.0),
-          color: widget.isSwitched ? AppColors.primary : AppColors.secondary, // Background color
+          color: widget.isSwitched
+              ? AppColors.primary
+              : AppColors.secondary, // Background color
         ),
         child: Stack(
           children: [
@@ -46,7 +49,7 @@ class CustomSwitchState extends State<CustomSwitch> {
                   color: Colors.white, // Thumb color
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
+                      color: Colors.black.withAlpha(51),
                       blurRadius: 2.0,
                       offset: const Offset(0, 2),
                     ),
